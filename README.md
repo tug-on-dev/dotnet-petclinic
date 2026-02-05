@@ -18,6 +18,10 @@ The initial prompt used to start the migration process was :
 - do not copy the same CSS since the Java one uses Spring colors and names, use Boostrap default for example
 ```
 
+- 📋 **[Migration Plan](copilot-session/plan.md)** - The detailed workplan created by GitHub Copilot CLI for the migration
+- 💬 **[Complete Session](copilot-session/session-java-dotnet.md)** - The full Copilot CLI session transcript showing the step-by-step migration process
+
+
 
 ### Original Application
 - **Repository**: [spring-projects/spring-petclinic](https://github.com/spring-projects/spring-petclinic)
