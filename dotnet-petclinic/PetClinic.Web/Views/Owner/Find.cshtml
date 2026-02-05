@@ -1,0 +1,30 @@
+@model PetClinic.Web.Models.ViewModels.OwnerSearchViewModel
+
+@{
+    ViewData["Title"] = "Find Owners";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h2>Find Owners</h2>
+        
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        
+        <form asp-action="Index" method="get" class="mt-4">
+            <div class="mb-3">
+                <label asp-for="LastName" class="form-label">Last Name</label>
+                <input type="text" name="lastName" value="@Model.LastName" class="form-control" placeholder="Enter last name" />
+            </div>
+            <div class="d-grid gap-2 d-md-flex">
+                <button type="submit" class="btn btn-primary">Find Owner</button>
+                <a asp-action="Create" class="btn btn-success">Add Owner</a>
+            </div>
+        </form>
+    </div>
+</div>

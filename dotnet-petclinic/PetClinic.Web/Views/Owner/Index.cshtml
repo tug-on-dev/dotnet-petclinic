@@ -1,0 +1,91 @@
+@model PetClinic.Web.Models.ViewModels.PaginatedList<PetClinic.Web.Models.Owner>
+
+@{
+    ViewData["Title"] = "Owners";
+    var lastName = ViewData["LastName"] as string;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Owners</h2>
+        
+        @if (!string.IsNullOrEmpty(lastName))
+        {
+            <p class="text-muted">Showing results for last name containing: <strong>@lastName</strong></p>
+        }
+        
+        @if (Model.Items.Count == 0)
+        {
+            <div class="alert alert-info">
+                No owners found.
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped table-hover mt-3">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>Telephone</th>
+                        <th>Pets</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var owner in Model.Items)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@owner.Id">
+                                    @owner.FirstName @owner.LastName
+                                </a>
+                            </td>
+                            <td>@owner.Address</td>
+                            <td>@owner.City</td>
+                            <td>@owner.Telephone</td>
+                            <td>@owner.Pets.Count</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            
+            @if (Model.TotalPages > 1)
+            {
+                <nav aria-label="Owner pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item @(Model.IsFirstPage ? "disabled" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-lastName="@lastName" asp-route-page="1">First</a>
+                        </li>
+                        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                            <a class="page-link" asp-action="Index" asp-route-lastName="@lastName" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+                        </li>
+                        
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-lastName="@lastName" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+                        
+                        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                            <a class="page-link" asp-action="Index" asp-route-lastName="@lastName" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+                        </li>
+                        <li class="page-item @(Model.IsLastPage ? "disabled" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-lastName="@lastName" asp-route-page="@Model.TotalPages">Last</a>
+                        </li>
+                    </ul>
+                </nav>
+                
+                <p class="text-center text-muted">
+                    Showing @((Model.PageNumber - 1) * Model.PageSize + 1) to @(Math.Min(Model.PageNumber * Model.PageSize, Model.TotalCount)) of @Model.TotalCount owners
+                </p>
+            }
+        }
+        
+        <div class="mt-3">
+            <a asp-action="Find" class="btn btn-secondary">Back to Search</a>
+            <a asp-action="Create" class="btn btn-success">Add Owner</a>
+        </div>
+    </div>
+</div>

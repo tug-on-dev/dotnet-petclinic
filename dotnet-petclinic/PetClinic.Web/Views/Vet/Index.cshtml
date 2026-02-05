@@ -1,0 +1,79 @@
+@model PetClinic.Web.Models.ViewModels.PaginatedList<PetClinic.Web.Models.Vet>
+
+@{
+    ViewData["Title"] = "Veterinarians";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Veterinarians</h2>
+        
+        @if (Model.Items.Count == 0)
+        {
+            <div class="alert alert-info">
+                No veterinarians found.
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped table-hover mt-3">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Specialties</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var vet in Model.Items)
+                    {
+                        <tr>
+                            <td>@vet.FirstName @vet.LastName</td>
+                            <td>
+                                @if (vet.VetSpecialties.Any())
+                                {
+                                    @string.Join(", ", vet.VetSpecialties.Select(vs => vs.Specialty.Name))
+                                }
+                                else
+                                {
+                                    <span class="text-muted">None</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            
+            @if (Model.TotalPages > 1)
+            {
+                <nav aria-label="Veterinarians pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item @(Model.IsFirstPage ? "disabled" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
+                        </li>
+                        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+                        </li>
+                        
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+                        
+                        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+                        </li>
+                        <li class="page-item @(Model.IsLastPage ? "disabled" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@Model.TotalPages">Last</a>
+                        </li>
+                    </ul>
+                </nav>
+                
+                <p class="text-center text-muted">
+                    Showing @((Model.PageNumber - 1) * Model.PageSize + 1) to @(Math.Min(Model.PageNumber * Model.PageSize, Model.TotalCount)) of @Model.TotalCount veterinarians
+                </p>
+            }
+        }
+    </div>
+</div>

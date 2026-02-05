@@ -1,0 +1,94 @@
+@model PetClinic.Web.Models.Visit
+
+@{
+    ViewData["Title"] = "New Visit";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>New Visit</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Pet and Owner Information -->
+                    <div class="alert alert-info">
+                        <h4><i class="bi bi-info-circle"></i> Pet Information</h4>
+                        <p class="mb-0">
+                            <strong>Owner:</strong> @Model.Pet.Owner.FirstName @Model.Pet.Owner.LastName<br />
+                            <strong>Pet:</strong> @Model.Pet.Name (@Model.Pet.PetType.Name)
+                        </p>
+                    </div>
+
+                    <!-- Visit Form -->
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="VisitDate" class="form-label">Visit Date</label>
+                            <input type="date" name="date" value="@Model.VisitDate.ToString("yyyy-MM-dd")" class="form-control" />
+                            <span asp-validation-for="VisitDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <textarea name="description" class="form-control" rows="4" placeholder="Enter visit description...">@Model.Description</textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-controller="Owner" asp-action="Details" asp-route-id="@Model.Pet.OwnerId" class="btn btn-secondary">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Add Visit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Previous Visits -->
+            @if (Model.Pet.Visits.Any())
+            {
+                <div class="card mt-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h4>Previous Visits</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var visit in Model.Pet.Visits)
+                                    {
+                                        <tr>
+                                            <td>@visit.VisitDate.ToString("MMM dd, yyyy")</td>
+                                            <td>@visit.Description</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info mt-4">
+                    <i class="bi bi-info-circle"></i> No previous visits recorded for this pet.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
