@@ -1,0 +1,99 @@
+@model PetClinic.Web.Models.ViewModels.PaginatedList<PetClinic.Web.Models.Drug>
+
+@{
+    ViewData["Title"] = "Pharmaceuticals";
+}
+
+<div class="pharmaceutical-inventory-header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="text-primary">Pharmaceutical Inventory Management</h2>
+        <a asp-action="Create" class="btn btn-success">
+            <span class="bi bi-plus-lg"></span> Add Pharmaceutical
+        </a>
+    </div>
+</div>
+
+@if (Model.Items.Count == 0)
+{
+    <div class="alert alert-info border-info">
+        <h4>Empty Inventory</h4>
+        <p class="mb-0">No pharmaceutical products registered. Click "Add Pharmaceutical" to register your first medication.</p>
+    </div>
+}
+else
+{
+    <div class="pharmaceutical-table-wrapper">
+        <table class="table table-bordered table-hover">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th width="20%">Product Name</th>
+                    <th width="35%">Product Description</th>
+                    <th width="15%" class="text-end">Retail Price</th>
+                    <th width="15%">Supplier</th>
+                    <th width="15%" class="text-center">Management</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pharma in Model.Items)
+                {
+                    <tr class="align-middle">
+                        <td class="fw-bold">@pharma.Name</td>
+                        <td class="text-muted">@pharma.Description</td>
+                        <td class="text-end text-success fw-semibold">$@pharma.Price.ToString("N2")</td>
+                        <td>@pharma.Manufacturer</td>
+                        <td class="text-center">
+                            <div class="btn-group" role="group">
+                                <a asp-action="Edit" asp-route-id="@pharma.Id" class="btn btn-sm btn-warning" title="Edit Product">
+                                    <span class="bi bi-pencil-square"></span>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@pharma.Id" class="btn btn-sm btn-danger" title="Delete Product">
+                                    <span class="bi bi-trash3"></span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="mt-4" aria-label="Pharmaceutical products pagination">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(Model.IsFirstPage ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="1" tabindex="-1">Start</a>
+                </li>
+                <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)" tabindex="-1">Prior</a>
+                </li>
+
+                @{
+                    int startPage = Math.Max(1, Model.PageNumber - 2);
+                    int endPage = Math.Min(Model.TotalPages, Model.PageNumber + 2);
+                }
+
+                @for (int idx = startPage; idx <= endPage; idx++)
+                {
+                    <li class="page-item @(Model.PageNumber == idx ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@idx">@idx</a>
+                    </li>
+                }
+
+                <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Following</a>
+                </li>
+                <li class="page-item @(Model.IsLastPage ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@Model.TotalPages">Final</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="pagination-summary text-center mt-2">
+            <small class="text-muted">
+                Displaying entries @((Model.PageNumber - 1) * Model.PageSize + 1) to @(Math.Min(Model.PageNumber * Model.PageSize, Model.TotalCount)) 
+                from a total of @Model.TotalCount pharmaceutical products
+            </small>
+        </div>
+    }
+}

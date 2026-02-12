@@ -84,3 +84,8 @@ Icon[
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Database files
+*.db
+*.db-shm
+*.db-wal

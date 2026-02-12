@@ -1,0 +1,114 @@
+@model PetClinic.Web.Models.Drug
+
+@{
+    ViewData["Title"] = "Modify Pharmaceutical";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-9 col-xl-8">
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Pharmaceutical Inventory</a></li>
+                    <li class="breadcrumb-item active">Modify Product</li>
+                </ol>
+            </nav>
+
+            <div class="card border-primary shadow">
+                <div class="card-header bg-primary text-white py-3">
+                    <h3 class="mb-0">Modify Pharmaceutical Product Details</h3>
+                    <small class="opacity-75">Currently editing: @Model.Name</small>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post" class="pharmaceutical-edit-form">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <div class="form-floating mb-1">
+                                    <input asp-for="Name" class="form-control" 
+                                           placeholder="Product Name" maxlength="100" 
+                                           id="productNameInput" required />
+                                    <label for="productNameInput">Product Identification Name <span class="text-danger">*</span></label>
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label fw-semibold">
+                                    Comprehensive Product Description
+                                </label>
+                                <textarea asp-for="Description" class="form-control" 
+                                          rows="7" maxlength="500"
+                                          placeholder="Provide detailed information regarding this pharmaceutical product"></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                                <div class="form-text">
+                                    Character count: <span id="descriptionCounter">@(Model.Description?.Length ?? 0)</span>/500
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-1">
+                                    <input asp-for="Price" type="number" class="form-control" 
+                                           step="0.01" min="0.01" max="10000"
+                                           placeholder="Price" id="priceInput" required />
+                                    <label for="priceInput">Retail Price (USD) <span class="text-danger">*</span></label>
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-1">
+                                    <input asp-for="Manufacturer" class="form-control" 
+                                           placeholder="Manufacturer" maxlength="50"
+                                           id="manufacturerInput" />
+                                    <label for="manufacturerInput">Manufacturing Organization</label>
+                                </div>
+                                <span asp-validation-for="Manufacturer" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="border-top mt-4 pt-4">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                                    <span class="bi bi-x-circle"></span> Discard Changes
+                                </a>
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <span class="bi bi-save"></span> Update Product Information
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="alert alert-warning border-warning mt-3">
+                <h6 class="alert-heading">
+                    <span class="bi bi-exclamation-triangle"></span> Important Notice
+                </h6>
+                <p class="mb-0 small">
+                    Changes made to pharmaceutical product information will be immediately reflected 
+                    throughout the system. Please verify all details before saving.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function() {
+            const descArea = document.querySelector('textarea[name="Description"]');
+            const counter = document.getElementById('descriptionCounter');
+            
+            if (descArea && counter) {
+                descArea.addEventListener('input', function() {
+                    counter.textContent = this.value.length;
+                });
+            }
+        })();
+    </script>
+}

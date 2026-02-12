@@ -109,5 +109,17 @@ public static class DbInitializer
         };
         context.Visits.AddRange(visits);
         context.SaveChanges();
+
+        // Seed Drugs
+        var drugs = new Drug[]
+        {
+            new() { Name = "Amoxicillin", Description = "Antibiotic for bacterial infections", Price = 15.99m, Manufacturer = "VetMed Inc." },
+            new() { Name = "Carprofen", Description = "Non-steroidal anti-inflammatory drug", Price = 24.50m, Manufacturer = "PetPharm" },
+            new() { Name = "Prednisone", Description = "Corticosteroid for inflammation", Price = 12.75m, Manufacturer = "AnimalCare Ltd." },
+            new() { Name = "Fenbendazole", Description = "Deworming medication", Price = 18.00m, Manufacturer = "VetMed Inc." },
+            new() { Name = "Revolution", Description = "Flea and tick prevention", Price = 45.99m, Manufacturer = "PetPharm" }
+        };
+        context.Drugs.AddRange(drugs);
+        context.SaveChanges();
     }
 }

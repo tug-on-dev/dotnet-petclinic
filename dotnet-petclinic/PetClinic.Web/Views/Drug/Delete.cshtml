@@ -1,0 +1,134 @@
+@model PetClinic.Web.Models.Drug
+
+@{
+    ViewData["Title"] = "Remove Pharmaceutical";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Pharmaceutical Inventory</a></li>
+                    <li class="breadcrumb-item active">Removal Confirmation</li>
+                </ol>
+            </nav>
+
+            <div class="card border-danger shadow-lg">
+                <div class="card-header bg-danger text-white py-3">
+                    <h3 class="mb-0">
+                        <span class="bi bi-exclamation-octagon"></span> Pharmaceutical Product Removal
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-warning border-2 border-warning">
+                        <h5 class="alert-heading">
+                            <span class="bi bi-shield-exclamation"></span> Permanent Removal Warning
+                        </h5>
+                        <p class="mb-1">
+                            You are initiating the permanent removal of this pharmaceutical product from the inventory system. 
+                        </p>
+                        <p class="mb-0 fw-bold">
+                            This operation is irreversible and cannot be undone.
+                        </p>
+                    </div>
+
+                    <h5 class="text-danger mb-3 mt-4">Product Information To Be Removed:</h5>
+                    
+                    <dl class="row pharmaceutical-details-list">
+                        <dt class="col-sm-5 text-end">Product Identification Name:</dt>
+                        <dd class="col-sm-7">
+                            <span class="badge bg-info text-white fs-6 px-3 py-2">@Model.Name</span>
+                        </dd>
+
+                        <dt class="col-sm-5 text-end">Product Description:</dt>
+                        <dd class="col-sm-7">
+                            @if (!string.IsNullOrWhiteSpace(Model.Description))
+                            {
+                                <p class="mb-0 border-start border-3 border-secondary ps-3">@Model.Description</p>
+                            }
+                            else
+                            {
+                                <em class="text-muted">Description not available</em>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-5 text-end">Current Retail Price:</dt>
+                        <dd class="col-sm-7">
+                            <span class="text-success fw-bold fs-4">
+                                $@Model.Price.ToString("F2")
+                            </span>
+                        </dd>
+
+                        <dt class="col-sm-5 text-end">Manufacturing Organization:</dt>
+                        <dd class="col-sm-7">
+                            @if (!string.IsNullOrWhiteSpace(Model.Manufacturer))
+                            {
+                                @Model.Manufacturer
+                            }
+                            else
+                            {
+                                <em class="text-muted">Manufacturer information not provided</em>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-5 text-end">System Record Identifier:</dt>
+                        <dd class="col-sm-7">
+                            <code class="bg-light px-2 py-1">#@Model.Id</code>
+                        </dd>
+                    </dl>
+
+                    <hr class="my-4 border-2" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <form asp-action="Delete" method="post" id="deleteProductForm" class="h-100">
+                                <input type="hidden" asp-for="Id" />
+                                <button type="submit" class="btn btn-danger btn-lg w-100 h-100">
+                                    <span class="bi bi-trash3-fill"></span> Confirm Permanent Removal
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg w-100 h-100 d-flex align-items-center justify-content-center">
+                                <span class="bi bi-arrow-counterclockwise"></span> Cancel & Return to Inventory
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-info mt-3">
+                <div class="card-body bg-info bg-opacity-10">
+                    <h6 class="text-info">
+                        <span class="bi bi-lightbulb"></span> Consider These Alternatives
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Review the pharmaceutical product details before making a final decision</li>
+                        <li>Modify product information instead of removing if data needs correction</li>
+                        <li>Maintain records for historical reference and audit purposes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteForm = document.getElementById('deleteProductForm');
+            if (deleteForm) {
+                deleteForm.addEventListener('submit', function(event) {
+                    const productName = @Json.Serialize(Model.Name);
+                    const confirmMessage = 'WARNING: You are about to permanently delete "' + productName + '" from the system.\n\nThis action CANNOT be reversed!\n\nAre you absolutely certain you wish to proceed?';
+                    
+                    if (!confirm(confirmMessage)) {
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+            }
+        });
+    </script>
+}
