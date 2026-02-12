@@ -1,0 +1,89 @@
+@model PetClinic.Web.Models.Drug
+
+@{
+    ViewData["Title"] = "Register Pharmaceutical";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Register New Pharmaceutical Product</h3>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post" class="pharmaceutical-registration-form">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="form-group mb-4">
+                        <label asp-for="Name" class="form-label fw-bold">
+                            Pharmaceutical Product Name <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Name" class="form-control form-control-lg" 
+                               placeholder="Enter the pharmaceutical product name" 
+                               maxlength="100" required />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                        <div class="form-text">Provide the official name or brand identifier</div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label asp-for="Description" class="form-label fw-bold">
+                            Product Details & Usage Information
+                        </label>
+                        <textarea asp-for="Description" class="form-control" rows="6" 
+                                  placeholder="Detailed information about this pharmaceutical product, including usage, warnings, and indications"
+                                  maxlength="500"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                        <div class="form-text">Optional field for additional product information</div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="Price" class="form-label fw-bold">
+                                Retail Unit Price <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-light">USD $</span>
+                                <input asp-for="Price" type="number" class="form-control" 
+                                       step="0.01" min="0.01" max="10000" 
+                                       placeholder="Enter price" required />
+                            </div>
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                            <div class="form-text">Range: $0.01 - $10,000.00</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Manufacturer" class="form-label fw-bold">
+                                Manufacturing Company
+                            </label>
+                            <input asp-for="Manufacturer" class="form-control form-control-lg" 
+                                   placeholder="Enter manufacturer or supplier name"
+                                   maxlength="50" />
+                            <span asp-validation-for="Manufacturer" class="text-danger"></span>
+                            <div class="form-text">Optional manufacturer information</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                            <span class="bi bi-arrow-left"></span> Return to Inventory
+                        </a>
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <span class="bi bi-check-circle"></span> Register Pharmaceutical
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="alert alert-light border mt-3">
+            <small class="text-muted">
+                <strong>Note:</strong> Fields marked with <span class="text-danger">*</span> are mandatory for registration.
+            </small>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

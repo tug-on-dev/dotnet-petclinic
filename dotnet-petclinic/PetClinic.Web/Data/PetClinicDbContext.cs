@@ -16,6 +16,7 @@ public class PetClinicDbContext : DbContext
     public DbSet<Vet> Vets => Set<Vet>();
     public DbSet<Specialty> Specialties => Set<Specialty>();
     public DbSet<VetSpecialty> VetSpecialties => Set<VetSpecialty>();
+    public DbSet<Drug> Drugs => Set<Drug>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,6 +30,7 @@ public class PetClinicDbContext : DbContext
         modelBuilder.Entity<Vet>().ToTable("vets");
         modelBuilder.Entity<Specialty>().ToTable("specialties");
         modelBuilder.Entity<VetSpecialty>().ToTable("vet_specialties");
+        modelBuilder.Entity<Drug>().ToTable("drugs");
 
         // Configure Owner -> Pets relationship with cascade delete
         modelBuilder.Entity<Owner>()
