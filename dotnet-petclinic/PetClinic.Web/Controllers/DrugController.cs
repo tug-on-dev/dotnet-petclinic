@@ -44,11 +44,11 @@ public class DrugController : Controller
         return RedirectToAction("Index");
     }
 
-    public async Task<IActionResult> Edit(int? drugId)
+    public async Task<IActionResult> Edit(int? id)
     {
-        if (drugId == null) return NotFound();
+        if (id == null) return NotFound();
 
-        var existingDrug = await _dbContext.Drugs.FindAsync(drugId);
+        var existingDrug = await _dbContext.Drugs.FindAsync(id);
         if (existingDrug == null) return NotFound();
         
         return View(existingDrug);
@@ -56,9 +56,9 @@ public class DrugController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int drugId, Drug updatedDrug)
+    public async Task<IActionResult> Edit(int id, Drug updatedDrug)
     {
-        if (drugId != updatedDrug.Id) return NotFound();
+        if (id != updatedDrug.Id) return NotFound();
 
         if (!ModelState.IsValid)
         {
@@ -70,11 +70,11 @@ public class DrugController : Controller
         return RedirectToAction("Index");
     }
 
-    public async Task<IActionResult> Delete(int? drugId)
+    public async Task<IActionResult> Delete(int? id)
     {
-        if (drugId == null) return NotFound();
+        if (id == null) return NotFound();
 
-        var drugToDelete = await _dbContext.Drugs.FindAsync(drugId);
+        var drugToDelete = await _dbContext.Drugs.FindAsync(id);
         if (drugToDelete == null) return NotFound();
 
         return View(drugToDelete);
@@ -82,9 +82,9 @@ public class DrugController : Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int drugId)
+    public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var drugToRemove = await _dbContext.Drugs.FindAsync(drugId);
+        var drugToRemove = await _dbContext.Drugs.FindAsync(id);
         if (drugToRemove != null)
         {
             _dbContext.Drugs.Remove(drugToRemove);
