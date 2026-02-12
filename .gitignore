@@ -83,6 +83,9 @@ Icon[
 .AppleDesktop
 Network Trash Folder
 Temporary Items
-.apdisk*.db
+.apdisk
+
+# Database files
+*.db
 *.db-shm
 *.db-wal
